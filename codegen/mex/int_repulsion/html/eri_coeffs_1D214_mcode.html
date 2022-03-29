@@ -1,0 +1,118 @@
+<!-- saved from url=(0014)about:internet -->
+<html>
+<body>
+<script src="resources/eml_report_loadable_data.js"></script>
+<div class="dead">
+<pre class="code">
+<span class="srcline"><span class="lineno"><a href="2,1" id="srcline1">  1</a></span><span class="line">function Integral = eri_primitive_fast(A,B,C,D,alpha,beta,gamma,delta,a,b,c,d)</span></span>
+<span class="srcline"><span class="lineno"><a href="2,2" id="srcline2">  2</a></span><span class="line"></span></span>
+<span class="srcline"><span class="lineno"><a href="2,3" id="srcline3">  3</a></span><span class="line">p = alpha + beta;</span></span>
+<span class="srcline"><span class="lineno"><a href="2,4" id="srcline4">  4</a></span><span class="line">q = gamma + delta;</span></span>
+<span class="srcline"><span class="lineno"><a href="2,5" id="srcline5">  5</a></span><span class="line"></span></span>
+<span class="srcline"><span class="lineno"><a href="2,6" id="srcline6">  6</a></span><span class="line">P = (alpha*A + beta*B)/p;</span></span>
+<span class="srcline"><span class="lineno"><a href="2,7" id="srcline7">  7</a></span><span class="line">Q = (gamma*C + delta*D)/q;</span></span>
+<span class="srcline"><span class="lineno"><a href="2,8" id="srcline8">  8</a></span><span class="line">W = (p*P + q*Q)/(p+q);</span></span>
+<span class="srcline"><span class="lineno"><a href="2,9" id="srcline9">  9</a></span><span class="line"></span></span>
+<span class="srcline"><span class="lineno"><a href="2,10" id="srcline10"> 10</a></span><span class="line">AB = A-B;</span></span>
+<span class="srcline"><span class="lineno"><a href="2,11" id="srcline11"> 11</a></span><span class="line">CD = C-D;</span></span>
+<span class="srcline"><span class="lineno"><a href="2,12" id="srcline12"> 12</a></span><span class="line"></span></span>
+<span class="srcline"><span class="lineno"><a href="2,13" id="srcline13"> 13</a></span><span class="line"><span class="comment">% Pre-calculate [00|00]^(m) auxiliary integrals</span></span></span>
+<span class="srcline"><span class="lineno"><a href="2,14" id="srcline14"> 14</a></span><span class="line">T = p*q/(p+q)*norm(P-Q).^2;</span></span>
+<span class="srcline"><span class="lineno"><a href="2,15" id="srcline15"> 15</a></span><span class="line">m = 0:(sum(a) + sum(b) + sum(c) + sum(d));</span></span>
+<span class="srcline"><span class="lineno"><a href="2,16" id="srcline16"> 16</a></span><span class="line">KAB = exp(-alpha*beta /p*sum(AB.^2));</span></span>
+<span class="srcline"><span class="lineno"><a href="2,17" id="srcline17"> 17</a></span><span class="line">KCD = exp(-gamma*delta/q*sum(CD.^2));</span></span>
+<span class="srcline"><span class="lineno"><a href="2,18" id="srcline18"> 18</a></span><span class="line">ssss_m = 2*pi^(5/2)/p/q/sqrt(p+q)*KAB*KCD*boysF(m,T);</span></span>
+<span class="srcline"><span class="lineno"><a href="2,19" id="srcline19"> 19</a></span><span class="line"></span></span>
+<span class="srcline"><span class="lineno"><a href="2,20" id="srcline20"> 20</a></span><span class="line">PA = P-A;</span></span>
+<span class="srcline"><span class="lineno"><a href="2,21" id="srcline21"> 21</a></span><span class="line">WP = W-P;</span></span>
+<span class="srcline"><span class="lineno"><a href="2,22" id="srcline22"> 22</a></span><span class="line">QC = Q-C;</span></span>
+<span class="srcline"><span class="lineno"><a href="2,23" id="srcline23"> 23</a></span><span class="line">WQ = W-Q;</span></span>
+<span class="srcline"><span class="lineno"><a href="2,24" id="srcline24"> 24</a></span><span class="line"></span></span>
+<span class="srcline"><span class="lineno"><a href="2,25" id="srcline25"> 25</a></span><span class="line">w = 1; Cx = eri_coeffs_1D(a(w),b(w),c(w),d(w));</span></span>
+<span class="srcline"><span class="lineno"><a href="2,26" id="srcline26"> 26</a></span><span class="line">w = 2; Cy = eri_coeffs_1D(a(w),b(w),c(w),d(w));</span></span>
+<span class="srcline"><span class="lineno"><a href="2,27" id="srcline27"> 27</a></span><span class="line">w = 3; Cz = eri_coeffs_1D(a(w),b(w),c(w),d(w));</span></span>
+<span class="srcline"><span class="lineno"><a href="2,28" id="srcline28"> 28</a></span><span class="line">Coeffs = conv2(conv2(Cx,Cy),Cz);</span></span>
+<span class="srcline"><span class="lineno"><a href="2,29" id="srcline29"> 29</a></span><span class="line"></span></span>
+<span class="srcline"><span class="lineno"><a href="2,30" id="srcline30"> 30</a></span><span class="line">Integral = Coeffs * ssss_m.';</span></span>
+</pre>
+</div>
+<pre class="code">
+<span class="srcline"><span class="lineno"><a href="2,31" id="srcline31"> 31</a></span><span class="line"></span></span>
+<span class="srcline"><span class="lineno"><a href="2,32" id="srcline32"> 32</a></span><span class="line"></span></span>
+<span class="srcline"><span class="lineno"><a href="2,33" id="srcline33"> 33</a></span><span class="line">  <span class="keyword">function</span> <span class="var type0" id="S44T0U295">result</span> = eri_coeffs_1D(<span class="var type1" id="S45T3U298">a</span>,<span class="var type1" id="S46T3U299">b</span>,<span class="var type1" id="S47T3U300">c</span>,<span class="var type1" id="S48T3U301">d</span>)</span></span>
+<span class="srcline"><span class="lineno"><a href="2,34" id="srcline34"> 34</a></span><span class="line">    </span></span>
+<span class="srcline"><span class="lineno"><a href="2,35" id="srcline35"> 35</a></span><span class="line">    <span class="keyword">if</span> (<span class="var type1" id="S46T3U306">b</span>&gt;=1)</span></span>
+<span class="srcline"><span class="lineno"><a href="2,36" id="srcline36"> 36</a></span><span class="line">      <span class="comment">% HRR-b: Transfers angular momentum from b to a</span></span></span>
+<span class="srcline"><span class="lineno"><a href="2,37" id="srcline37"> 37</a></span><span class="line">      <span class="comment">%------------------------------------------------------------------</span></span></span>
+<span class="srcline"><span class="lineno"><a href="2,38" id="srcline38"> 38</a></span><span class="line">      <span class="comment">% [a,b|c,d]^(m) = [a+1,b-1|c,d]^(m) + AB(i)*[a,b-1|c,d]^(m)</span></span></span>
+<span class="srcline"><span class="lineno"><a href="2,39" id="srcline39"> 39</a></span><span class="line">      <span class="var type0" id="S49T0U310">t1</span> = <span class="message error" id="M5F214C">eri_coeffs_1D(<span class="var type1" id="S45T3U314">a</span>+1,<span class="var type1" id="S46T3U317">b</span>-1,<span class="var type1" id="S47T3U319">c</span>,<span class="var type1" id="S48T3U320">d</span>)</span>;</span></span>
+<span class="srcline"><span class="lineno"><a href="2,40" id="srcline40"> 40</a></span><span class="line">      <span class="var type0" id="S51T0U323">t2</span> = <span class="message error" id="M6F214C">eri_coeffs_1D(<span class="var type1" id="S45T3U326">a</span>  ,<span class="var type1" id="S46T3U328">b</span>-1,<span class="var type1" id="S47T3U330">c</span>,<span class="var type1" id="S48T3U331">d</span>)</span>;</span></span>
+<span class="srcline"><span class="lineno"><a href="2,41" id="srcline41"> 41</a></span><span class="line">      <span class="var type0" id="S44T0U334">result</span> = <span class="var type0" id="S49T0U336"><span class="message error" id="M7F214C">t1</span></span> + <span class="var type0" id="S20T0U339">AB</span>(<span class="var type0" id="S37T0U340">w</span>)*[<span class="var type0" id="S51T0U343">t2</span> 0];</span></span>
+<span class="srcline"><span class="lineno"><a href="2,42" id="srcline42"> 42</a></span><span class="line">      </span></span>
+<span class="srcline"><span class="lineno"><a href="2,43" id="srcline43"> 43</a></span><span class="line">    <span class="keyword">elseif</span> (<span class="var type1" id="S48T3U348">d</span>&gt;=1)</span></span>
+<span class="srcline"><span class="lineno"><a href="2,44" id="srcline44"> 44</a></span><span class="line">      <span class="comment">% HRR-d: Transfers angular momentum from d to c</span></span></span>
+<span class="srcline"><span class="lineno"><a href="2,45" id="srcline45"> 45</a></span><span class="line">      <span class="comment">%------------------------------------------------------------------</span></span></span>
+<span class="srcline"><span class="lineno"><a href="2,46" id="srcline46"> 46</a></span><span class="line">      <span class="comment">% [a,b|c,d]^(m) = [a,b|c+1,d-1]^(m) + CD(i)*[a,b|c,d-1]^(m)</span></span></span>
+<span class="srcline"><span class="lineno"><a href="2,47" id="srcline47"> 47</a></span><span class="line">      <span class="var type0" id="S49T0U352">t1</span> = <span class="message error" id="M8F214C">eri_coeffs_1D(<span class="var type1" id="S45T3U355">a</span>,<span class="var type1" id="S46T3U356">b</span>,<span class="var type1" id="S47T3U358">c</span>+1,<span class="var type1" id="S48T3U361">d</span>-1)</span>;</span></span>
+<span class="srcline"><span class="lineno"><a href="2,48" id="srcline48"> 48</a></span><span class="line">      <span class="var type0" id="S51T0U365">t2</span> = <span class="message error" id="M9F214C">eri_coeffs_1D(<span class="var type1" id="S45T3U368">a</span>,<span class="var type1" id="S46T3U369">b</span>,<span class="var type1" id="S47T3U370">c</span>  ,<span class="var type1" id="S48T3U372">d</span>-1)</span>;</span></span>
+<span class="srcline"><span class="lineno"><a href="2,49" id="srcline49"> 49</a></span><span class="line">      <span class="var type0" id="S44T0U376">result</span> = <span class="var type0" id="S49T0U378"><span class="message error" id="M10F214C">t1</span></span> + <span class="var type0" id="S21T0U381">CD</span>(<span class="var type0" id="S37T0U382">w</span>)*[<span class="var type0" id="S51T0U385">t2</span> 0];</span></span>
+<span class="srcline"><span class="lineno"><a href="2,50" id="srcline50"> 50</a></span><span class="line">      </span></span>
+<span class="srcline"><span class="lineno"><a href="2,51" id="srcline51"> 51</a></span><span class="line">    <span class="keyword">elseif</span> (<span class="var type1" id="S45T3U390">a</span>&gt;=1)</span></span>
+<span class="srcline"><span class="lineno"><a href="2,52" id="srcline52"> 52</a></span><span class="line">      <span class="comment">% VRR-a: Reduces angular momentum a</span></span></span>
+<span class="srcline"><span class="lineno"><a href="2,53" id="srcline53"> 53</a></span><span class="line">      <span class="comment">%------------------------------------------------------------------</span></span></span>
+<span class="srcline"><span class="lineno"><a href="2,54" id="srcline54"> 54</a></span><span class="line">      <span class="comment">% [a,0|c,0]^(m) = PA(i)*[a-1,0|c,0]^(m) + WP(i)*[a-1,0|c,0]^(m+1)</span></span></span>
+<span class="srcline"><span class="lineno"><a href="2,55" id="srcline55"> 55</a></span><span class="line">      <span class="comment">%                 + (a-1)/(2p)([a-2,0|c,0]^(m) - q/(p+q)*[a-2,0|c,0]^(m+1)])</span></span></span>
+<span class="srcline"><span class="lineno"><a href="2,56" id="srcline56"> 56</a></span><span class="line">      <span class="comment">%                 + c/2/(p+q)*[a-1,0|c-1,0]^(m+1)</span></span></span>
+<span class="srcline"><span class="lineno"><a href="2,57" id="srcline57"> 57</a></span><span class="line">      <span class="var type0" id="S55T0U394">t</span> = <span class="message error" id="M11F214C">eri_coeffs_1D(<span class="var type1" id="S45T3U398">a</span>-1,0,<span class="var type1" id="S47T3U401">c</span>,0)</span>;</span></span>
+<span class="srcline"><span class="lineno"><a href="2,58" id="srcline58"> 58</a></span><span class="line">      <span class="var type0" id="S44T0U405">result</span> = <span class="var type1" id="S33T70U409">PA</span>(<span class="var type1" id="S37T71U410">w</span>)*[<span class="var type0" id="S55T0U413"><span class="message error" id="M12F214C">t</span></span> 0] + <span class="var type0" id="S34T0U417">WP</span>(<span class="var type0" id="S37T0U418">w</span>)*[0 <span class="var type0" id="S55T0U422">t</span>];</span></span>
+<span class="srcline"><span class="lineno"><a href="2,59" id="srcline59"> 59</a></span><span class="line">      <span class="keyword">if</span> (<span class="var type1" id="S45T3U427">a</span>&gt;=2)</span></span>
+<span class="srcline"><span class="lineno"><a href="2,60" id="srcline60"> 60</a></span><span class="line">        <span class="var type0" id="S55T0U431">t</span> = <span class="message error" id="M13F214C">eri_coeffs_1D(<span class="var type1" id="S45T3U435">a</span>-2,0,<span class="var type1" id="S47T3U438">c</span>,0)</span>;</span></span>
+<span class="srcline"><span class="lineno"><a href="2,61" id="srcline61"> 61</a></span><span class="line">        <span class="var type0" id="S58T0U442">v</span> = (<span class="var type1" id="S45T3U447">a</span>-1)/(2*<span class="var type1" id="S15T72U452">p</span>)*([<span class="var type0" id="S55T0U457"><span class="message error" id="M14F214C">t</span></span> 0] - <span class="var type0" id="S16T0U461">q</span>/(<span class="var type0" id="S15T0U464">p</span>+<span class="var type0" id="S16T0U465">q</span>)*[0 <span class="var type0" id="S55T0U469">t</span>]);</span></span>
+<span class="srcline"><span class="lineno"><a href="2,62" id="srcline62"> 62</a></span><span class="line">        <span class="var type0" id="S44T0U472">result</span> = <span class="var type0" id="S44T0U474"><span class="message error" id="M15F214C">result</span></span> + [<span class="var type0" id="S58T0U477">v</span> 0];</span></span>
+<span class="srcline"><span class="lineno"><a href="2,63" id="srcline63"> 63</a></span><span class="line">      <span class="keyword">end</span></span></span>
+<span class="srcline"><span class="lineno"><a href="2,64" id="srcline64"> 64</a></span><span class="line">      <span class="keyword">if</span> (<span class="var type1" id="S47T3U483">c</span>&gt;=1)</span></span>
+<span class="srcline"><span class="lineno"><a href="2,65" id="srcline65"> 65</a></span><span class="line">        <span class="var type0" id="S55T0U487">t</span> = <span class="message error" id="M16F214C">eri_coeffs_1D(<span class="var type1" id="S45T3U491">a</span>-1,0,<span class="var type1" id="S47T3U495">c</span>-1,0)</span>;</span></span>
+<span class="srcline"><span class="lineno"><a href="2,66" id="srcline66"> 66</a></span><span class="line">        <span class="var type0" id="S58T0U500">v</span> = <span class="var type1" id="S47T3U504">c</span>/2/(<span class="var type1" id="S15T72U508">p</span>+<span class="var type1" id="S16T73U509">q</span>)*[0 <span class="var type0" id="S55T0U513"><span class="message error" id="M17F214C">t</span></span>];</span></span>
+<span class="srcline"><span class="lineno"><a href="2,67" id="srcline67"> 67</a></span><span class="line">        <span class="var type0" id="S44T0U516">result</span> = <span class="var type0" id="S44T0U518"><span class="message error" id="M18F214C">result</span></span> + [<span class="var type0" id="S58T0U521">v</span> 0];</span></span>
+<span class="srcline"><span class="lineno"><a href="2,68" id="srcline68"> 68</a></span><span class="line">      <span class="keyword">end</span></span></span>
+<span class="srcline"><span class="lineno"><a href="2,69" id="srcline69"> 69</a></span><span class="line">      </span></span>
+<span class="srcline"><span class="lineno"><a href="2,70" id="srcline70"> 70</a></span><span class="line">    <span class="keyword">elseif</span> (<span class="var type1" id="S47T3U526">c</span>&gt;=1)</span></span>
+<span class="srcline"><span class="lineno"><a href="2,71" id="srcline71"> 71</a></span><span class="line">      <span class="comment">% VRR-c: Reduces angular momentum c</span></span></span>
+<span class="srcline"><span class="lineno"><a href="2,72" id="srcline72"> 72</a></span><span class="line">      <span class="comment">%------------------------------------------------------------------</span></span></span>
+<span class="srcline"><span class="lineno"><a href="2,73" id="srcline73"> 73</a></span><span class="line">      <span class="comment">% [a,0|c,0]^(m) = QC(x)*[a,0|c-1,0]^(m) + WQ(x)*[a,0|c-1,0]^(m+1)</span></span></span>
+<span class="srcline"><span class="lineno"><a href="2,74" id="srcline74"> 74</a></span><span class="line">      <span class="comment">%                 + (c-1)/(2q)([a,0|c-2,0]^(m) - p/(p+q)*[a,0|c-2,0]^(m+1)])</span></span></span>
+<span class="srcline"><span class="lineno"><a href="2,75" id="srcline75"> 75</a></span><span class="line">      <span class="comment">%                 + a/2/(p+q)*[a-1,0|c-1,0]^(m+1)</span></span></span>
+<span class="srcline"><span class="lineno"><a href="2,76" id="srcline76"> 76</a></span><span class="line">      <span class="var type0" id="S55T0U530">t</span> = <span class="message error" id="M19F214C">eri_coeffs_1D(<span class="var type1" id="S45T3U533">a</span>,0,<span class="var type1" id="S47T3U536">c</span>-1,0)</span>;</span></span>
+<span class="srcline"><span class="lineno"><a href="2,77" id="srcline77"> 77</a></span><span class="line">      <span class="var type0" id="S44T0U541">result</span> = <span class="var type1" id="S35T74U545">QC</span>(<span class="var type1" id="S37T71U546">w</span>)*[<span class="var type0" id="S55T0U549"><span class="message error" id="M20F214C">t</span></span> 0] + <span class="var type0" id="S36T0U553">WQ</span>(<span class="var type0" id="S37T0U554">w</span>)*[0 <span class="var type0" id="S55T0U558">t</span>];</span></span>
+<span class="srcline"><span class="lineno"><a href="2,78" id="srcline78"> 78</a></span><span class="line">      <span class="keyword">if</span> (<span class="var type1" id="S47T3U563">c</span>&gt;=2)</span></span>
+<span class="srcline"><span class="lineno"><a href="2,79" id="srcline79"> 79</a></span><span class="line">        <span class="var type0" id="S55T0U567">t</span> = <span class="message error" id="M21F214C">eri_coeffs_1D(<span class="var type1" id="S45T3U570">a</span>,0,<span class="var type1" id="S47T3U573">c</span>-2,0)</span>;</span></span>
+<span class="srcline"><span class="lineno"><a href="2,80" id="srcline80"> 80</a></span><span class="line">        <span class="var type0" id="S58T0U578">v</span> = (<span class="var type1" id="S47T3U583">c</span>-1)/(2*<span class="var type1" id="S16T73U588">q</span>)*([<span class="var type0" id="S55T0U593"><span class="message error" id="M22F214C">t</span></span> 0] - <span class="var type0" id="S15T0U597">p</span>/(<span class="var type0" id="S15T0U600">p</span>+<span class="var type0" id="S16T0U601">q</span>)*[0 <span class="var type0" id="S55T0U605">t</span>]);</span></span>
+<span class="srcline"><span class="lineno"><a href="2,81" id="srcline81"> 81</a></span><span class="line">        <span class="var type0" id="S44T0U608">result</span> = <span class="var type0" id="S44T0U610"><span class="message error" id="M23F214C">result</span></span> + [<span class="var type0" id="S58T0U613">v</span> 0];</span></span>
+<span class="srcline"><span class="lineno"><a href="2,82" id="srcline82"> 82</a></span><span class="line">      <span class="keyword">end</span></span></span>
+<span class="srcline"><span class="lineno"><a href="2,83" id="srcline83"> 83</a></span><span class="line">      <span class="keyword">if</span> (<span class="var type1" id="S45T3U619">a</span>&gt;=1)</span></span>
+<span class="srcline"><span class="lineno"><a href="2,84" id="srcline84"> 84</a></span><span class="line">        <span class="var type0" id="S55T0U623">t</span> = <span class="message error" id="M24F214C">eri_coeffs_1D(<span class="var type1" id="S45T3U627">a</span>-1,0,<span class="var type1" id="S47T3U631">c</span>-1,0)</span>;</span></span>
+<span class="srcline"><span class="lineno"><a href="2,85" id="srcline85"> 85</a></span><span class="line">        <span class="var type0" id="S58T0U636">v</span> = <span class="var type1" id="S45T3U640">a</span>/2/(<span class="var type1" id="S15T72U644">p</span>+<span class="var type1" id="S16T73U645">q</span>)*[0 <span class="var type0" id="S55T0U649"><span class="message error" id="M25F214C">t</span></span>];</span></span>
+<span class="srcline"><span class="lineno"><a href="2,86" id="srcline86"> 86</a></span><span class="line">        <span class="var type0" id="S44T0U652">result</span> = <span class="var type0" id="S44T0U654"><span class="message fatal" id="M26F214C">result</span></span> + [<span class="var type0" id="S58T0U657">v</span> 0];</span></span>
+<span class="srcline"><span class="lineno"><a href="2,87" id="srcline87"> 87</a></span><span class="line">      <span class="keyword">end</span></span></span>
+<span class="srcline"><span class="lineno"><a href="2,88" id="srcline88"> 88</a></span><span class="line">      </span></span>
+<span class="srcline"><span class="lineno"><a href="2,89" id="srcline89"> 89</a></span><span class="line">    <span class="keyword">else</span></span></span>
+<span class="srcline"><span class="lineno"><a href="2,90" id="srcline90"> 90</a></span><span class="line">      </span></span>
+<span class="srcline"><span class="lineno"><a href="2,91" id="srcline91"> 91</a></span><span class="line">      <span class="comment">% [0,0|0,0]^(m)</span></span></span>
+<span class="srcline"><span class="lineno"><a href="2,92" id="srcline92"> 92</a></span><span class="line">      <span class="comment">%------------------------------------------------------------------</span></span></span>
+<span class="srcline"><span class="lineno"><a href="2,93" id="srcline93"> 93</a></span><span class="line">      <span class="comment">% (m-dependent prefactors are included outside of recursion)</span></span></span>
+<span class="srcline"><span class="lineno"><a href="2,94" id="srcline94"> 94</a></span><span class="line">      <span class="var type0" id="S44T0U662">result</span> = 1;</span></span>
+<span class="srcline"><span class="lineno"><a href="2,95" id="srcline95"> 95</a></span><span class="line">      </span></span>
+<span class="srcline"><span class="lineno"><a href="2,96" id="srcline96"> 96</a></span><span class="line">    <span class="keyword">end</span></span></span>
+<span class="srcline"><span class="lineno"><a href="2,97" id="srcline97"> 97</a></span><span class="line">  <span class="keyword">end</span></span></span>
+<span class="srcline"><span class="lineno"><a href="2,98" id="srcline98"> 98</a></span><span class="line"></span></span>
+<span class="srcline"><span class="lineno"><a href="2,99" id="srcline99"> 99</a></span><span class="line"></span></span>
+<span class="srcline"><span class="lineno"><a href="2,100" id="srcline100">100</a></span><span class="line"></span></span>
+</pre>
+<div class="dead">
+<pre class="code">
+<span class="srcline"><span class="lineno"><a href="2,101" id="srcline101">101</a></span><span class="line">end</span></span>
+<span class="srcline"><span class="lineno"><a href="2,102" id="srcline102">102</a></span><span class="line"> </span></span>
+</pre>
+</div>
+</body>
+</html>
